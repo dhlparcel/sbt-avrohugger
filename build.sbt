@@ -2,7 +2,7 @@ name := "sbt-avrohugger"
 organization := "com.julianpeeters"
 description := "Sbt plugin for compiling Avro to Scala"
 
-version := "2.0.0-RC22"
+version := "2.0.0-RC22-dhl"
 
 enablePlugins(SbtPlugin)
 
@@ -17,20 +17,20 @@ crossSbtVersions := Seq(sbtVersion.value)
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Ywarn-value-discard")
 
 libraryDependencies ++= Seq(
-  "com.julianpeeters" %% "avrohugger-core" % "1.0.0-RC22",
+  "com.julianpeeters" %% "avrohugger-core" % "1.0.0-RC22-dhl",
   "com.julianpeeters" %% "avrohugger-filesorter" % "1.0.0-RC22",
   "io.spray" %% "spray-json" % "1.3.2",
   "org.specs2" %% "specs2-core" % "3.8.6" % "test")
 
 publishMavenStyle := true
 publishArtifact in Test := false
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (version.value.trim.endsWith("SNAPSHOT"))
-    Some("snapshots" at nexus + "content/repositories/snapshots")
-  else
-    Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
+publishTo := Some(
+  "DHL Artifactory" at "https://repo.dhlparcel.nl/artifactory/dhlparcel-sbt-local"
+)
+
+credentials += Credentials(
+  Path.userHome / ".sbt" / ".artifactory-credentials"
+)
 pomIncludeRepository := { _ => false }
 licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
 homepage := Some(url("https://github.com/julianpeeters/sbt-avrohugger"))
